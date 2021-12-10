@@ -7,4 +7,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "SoundWaveGraph"
-include ':app'
+include ':app','ecgfilter'
