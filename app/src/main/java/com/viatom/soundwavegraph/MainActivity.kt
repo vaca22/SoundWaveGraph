@@ -11,22 +11,30 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.MutableLiveData
+import com.viatom.soundwavegraph.view.WaveView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-
+    lateinit var waveView: WaveView
     lateinit var audioRecord: AudioRecord
+    var currentUpdateIndex = 0
     val dataScope = CoroutineScope(Dispatchers.IO)
+    val sampleHz=8000
+    val ff=FloatArray(4){
+        0f
+    }
+    var nn=0
 
     @SuppressLint("MissingPermission")
     fun record(){
-        val minBufferInByte=AudioRecord.getMinBufferSize(8000, AudioFormat.CHANNEL_IN_MONO,AudioFormat.ENCODING_PCM_16BIT)
+        val minBufferInByte=AudioRecord.getMinBufferSize(sampleHz, AudioFormat.CHANNEL_IN_MONO,AudioFormat.ENCODING_PCM_16BIT)
         val min2=minBufferInByte/2
         Log.e("huhu",minBufferInByte.toString())
          audioRecord=  AudioRecord(MediaRecorder.AudioSource.MIC,
-            8000,
+            sampleHz,
             AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
             minBufferInByte)
@@ -34,9 +42,34 @@ class MainActivity : AppCompatActivity() {
             while (true){
                 val sampleData = ShortArray(min2)
                 val size = audioRecord.read(sampleData, 0, min2)
+
+
+
                 if(size>0){
-                    Log.e("size",size.toString())
+                    do {
+                        val dd=sampleData[nn]
+                        waveView.data[currentUpdateIndex] = (dd.toFloat() /30).toInt()
+                        currentUpdateIndex++
+                        if (currentUpdateIndex >= 500) {
+                            currentUpdateIndex -= 500
+                        }
+                        nn+=64
+                    }while (nn<size)
+                    nn=nn-size
+
+
+                    waveView.currentHead = currentUpdateIndex - 1
+                    var t = currentUpdateIndex + waveView.headLen
+                    if (t > waveView.drawSize - 1) {
+                        t -=waveView.drawSize
+                    }
+                    waveView.currentTail = t
+                    waveView.disp=true
+                    waveView.invalidate()
                 }
+
+
+
             }
         }
         audioRecord.startRecording()
@@ -49,6 +82,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        waveView=findViewById(R.id.fukc)
         val requestPhotoPermission= registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) {
