@@ -15,6 +15,7 @@ import com.viatom.soundwavegraph.view.WaveView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.nio.ShortBuffer
 
 class MainActivity : AppCompatActivity() {
     lateinit var waveView: WaveView
@@ -22,10 +23,15 @@ class MainActivity : AppCompatActivity() {
     var currentUpdateIndex = 0
     val dataScope = CoroutineScope(Dispatchers.IO)
     val sampleHz = 8000
-    val ff = FloatArray(4) {
-        0f
-    }
-    var nn = 0
+
+
+
+
+
+
+
+
+
 
     @SuppressLint("MissingPermission")
     fun record() {
@@ -50,28 +56,28 @@ class MainActivity : AppCompatActivity() {
 
 
 
-                if (size > 0) {
-                    do {
-                        val dd = sampleData[nn]
-                        waveView.data[currentUpdateIndex] = (dd.toFloat() / 30).toInt()
-                        currentUpdateIndex++
-                        if (currentUpdateIndex >= 500) {
-                            currentUpdateIndex -= 500
-                        }
-                        nn += 64
-                    } while (nn < size)
-                    nn = nn - size
-
-
-                    waveView.currentHead = currentUpdateIndex - 1
-                    var t = currentUpdateIndex + waveView.headLen
-                    if (t > waveView.drawSize - 1) {
-                        t -= waveView.drawSize
-                    }
-                    waveView.currentTail = t
-                    waveView.disp = true
-                    waveView.invalidate()
-                }
+//                if (size > 0) {
+//                    do {
+//                        val dd = sampleData[nn]
+//                        waveView.data[currentUpdateIndex] = (dd.toFloat() / 30).toInt()
+//                        currentUpdateIndex++
+//                        if (currentUpdateIndex >= 500) {
+//                            currentUpdateIndex -= 500
+//                        }
+//                        nn += 64
+//                    } while (nn < size)
+//                    nn = nn - size
+//
+//
+//                    waveView.currentHead = currentUpdateIndex - 1
+//                    var t = currentUpdateIndex + waveView.headLen
+//                    if (t > waveView.drawSize - 1) {
+//                        t -= waveView.drawSize
+//                    }
+//                    waveView.currentTail = t
+//                    waveView.disp = true
+//                    waveView.invalidate()
+//                }
 
 
             }
@@ -83,6 +89,38 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        val gg=ShortBuffer.allocate(1000)
+
+        gg.put(234)
+        gg.put(34)
+        gg.flip()
+        //gg.clear()
+        //val xx=gg.get()
+        val xx=1
+        gg.get(5)
+        gg.get()
+        Log.e("gg"+xx,gg.position().toString())
+        Log.e("ggv"+xx,gg.capacity().toString())
+        Log.e("ggv2"+xx,gg.limit().toString())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         waveView = findViewById(R.id.fukc)
         val requestPhotoPermission = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
