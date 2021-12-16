@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var audioRecord: AudioRecord
     var currentUpdateIndex = 0
     val dataScope = CoroutineScope(Dispatchers.IO)
-    val sampleHz = 8000
+    val sampleHz = 16000
 
 
 
@@ -91,19 +91,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        val gg=ShortBuffer.allocate(1000)
 
-        gg.put(234)
-        gg.put(34)
-        gg.flip()
-        //gg.clear()
-        //val xx=gg.get()
-        val xx=1
-        gg.get(5)
-        gg.get()
-        Log.e("gg"+xx,gg.position().toString())
-        Log.e("ggv"+xx,gg.capacity().toString())
-        Log.e("ggv2"+xx,gg.limit().toString())
 
 
 
