@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                         if (currentUpdateIndex >= 500) {
                             currentUpdateIndex -= 500
                         }
-                        nn+=64
+                        nn+=1
                     }while (nn<size)
                     nn=nn-size
 
