@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var audioRecord: AudioRecord
     var currentUpdateIndex = 0
     val dataScope = CoroutineScope(Dispatchers.IO)
-    val sampleHz=8000
+    val sampleHz=44100
     val ff=FloatArray(4){
         0f
     }
